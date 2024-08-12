@@ -1,0 +1,419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SCXPJABES23EIST6015Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CHEQUESJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="NUMEROCHEQUE" />
+          </Key>
+          <Property Name="NUMEROCHEQUE" Type="int" Nullable="false" />
+          <Property Name="NUMEROFACTURA" Type="int" />
+          <Property Name="VALORCHEQUE" Type="money" />
+          <Property Name="FECHACHEQUE" Type="date" />
+        </EntityType>
+        <EntityType Name="FACTURASJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="NUMEROFACTURA" />
+          </Key>
+          <Property Name="NUMEROFACTURA" Type="int" Nullable="false" />
+          <Property Name="CODIGO" Type="varchar" MaxLength="7" />
+          <Property Name="VALORFACTURA" Type="money" />
+          <Property Name="FECHAFACTURA" Type="date" />
+          <Property Name="FECHAVENCIMIENTO" Type="date" />
+        </EntityType>
+        <EntityType Name="PROVEEDORESJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="varchar" MaxLength="7" Nullable="false" />
+          <Property Name="NOMBRES" Type="varchar" MaxLength="30" />
+          <Property Name="APELLIDOS" Type="varchar" MaxLength="30" />
+          <Property Name="DIRECCION" Type="varchar" MaxLength="45" />
+          <Property Name="CIUDAD" Type="varchar" MaxLength="30" />
+          <Property Name="TELEFONO" Type="varchar" MaxLength="12" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="USUARIOSJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="USUARIO" />
+          </Key>
+          <Property Name="USUARIO" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="CLAVE" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SCXPJABES23EIST6015.dbo.ESTADODECUENTAS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="ESTADODECUENTAS">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+            <PropertyRef Name="NUMEROFACTURA" />
+          </Key>
+          <Property Name="CODIGO" Type="varchar" MaxLength="7" Nullable="false" />
+          <Property Name="NOMBRES" Type="varchar" MaxLength="30" />
+          <Property Name="APELLIDOS" Type="varchar" MaxLength="30" />
+          <Property Name="NUMEROFACTURA" Type="int" Nullable="false" />
+          <Property Name="MONTO" Type="money" />
+          <Property Name="PAGOS" Type="money" />
+          <Property Name="BALANCE" Type="money" />
+        </EntityType>
+        <Association Name="CHEQ_FACT">
+          <End Role="FACTURASJABES23EIST6015" Type="Self.FACTURASJABES23EIST6015" Multiplicity="0..1" />
+          <End Role="CHEQUESJABES23EIST6015" Type="Self.CHEQUESJABES23EIST6015" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTURASJABES23EIST6015">
+              <PropertyRef Name="NUMEROFACTURA" />
+            </Principal>
+            <Dependent Role="CHEQUESJABES23EIST6015">
+              <PropertyRef Name="NUMEROFACTURA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FACT_PROV">
+          <End Role="PROVEEDORESJABES23EIST6015" Type="Self.PROVEEDORESJABES23EIST6015" Multiplicity="0..1" />
+          <End Role="FACTURASJABES23EIST6015" Type="Self.FACTURASJABES23EIST6015" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROVEEDORESJABES23EIST6015">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="FACTURASJABES23EIST6015">
+              <PropertyRef Name="CODIGO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="SCXPJABES23EIST6015ModelStoreContainer">
+          <EntitySet Name="CHEQUESJABES23EIST6015" EntityType="Self.CHEQUESJABES23EIST6015" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FACTURASJABES23EIST6015" EntityType="Self.FACTURASJABES23EIST6015" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROVEEDORESJABES23EIST6015" EntityType="Self.PROVEEDORESJABES23EIST6015" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USUARIOSJABES23EIST6015" EntityType="Self.USUARIOSJABES23EIST6015" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ESTADODECUENTAS" EntityType="Self.ESTADODECUENTAS" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ESTADODECUENTAS].[CODIGO] AS [CODIGO], 
+    [ESTADODECUENTAS].[NOMBRES] AS [NOMBRES], 
+    [ESTADODECUENTAS].[APELLIDOS] AS [APELLIDOS], 
+    [ESTADODECUENTAS].[NUMEROFACTURA] AS [NUMEROFACTURA], 
+    [ESTADODECUENTAS].[MONTO] AS [MONTO], 
+    [ESTADODECUENTAS].[PAGOS] AS [PAGOS], 
+    [ESTADODECUENTAS].[BALANCE] AS [BALANCE]
+    FROM [dbo].[ESTADODECUENTAS] AS [ESTADODECUENTAS]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="CHEQ_FACT" Association="Self.CHEQ_FACT">
+            <End Role="FACTURASJABES23EIST6015" EntitySet="FACTURASJABES23EIST6015" />
+            <End Role="CHEQUESJABES23EIST6015" EntitySet="CHEQUESJABES23EIST6015" />
+          </AssociationSet>
+          <AssociationSet Name="FACT_PROV" Association="Self.FACT_PROV">
+            <End Role="PROVEEDORESJABES23EIST6015" EntitySet="PROVEEDORESJABES23EIST6015" />
+            <End Role="FACTURASJABES23EIST6015" EntitySet="FACTURASJABES23EIST6015" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SCXPJABES23EIST6015Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CHEQUESJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="NUMEROCHEQUE" />
+          </Key>
+          <Property Name="NUMEROCHEQUE" Type="Int32" Nullable="false" />
+          <Property Name="NUMEROFACTURA" Type="Int32" />
+          <Property Name="VALORCHEQUE" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FECHACHEQUE" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="FACTURASJABES23EIST6015" Relationship="Self.CHEQ_FACT" FromRole="CHEQUESJABES23EIST6015" ToRole="FACTURASJABES23EIST6015" />
+        </EntityType>
+        <EntityType Name="FACTURASJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="NUMEROFACTURA" />
+          </Key>
+          <Property Name="NUMEROFACTURA" Type="Int32" Nullable="false" />
+          <Property Name="CODIGO" Type="String" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Name="VALORFACTURA" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FECHAFACTURA" Type="DateTime" Precision="0" />
+          <Property Name="FECHAVENCIMIENTO" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="CHEQUESJABES23EIST6015" Relationship="Self.CHEQ_FACT" FromRole="FACTURASJABES23EIST6015" ToRole="CHEQUESJABES23EIST6015" />
+          <NavigationProperty Name="PROVEEDORESJABES23EIST6015" Relationship="Self.FACT_PROV" FromRole="FACTURASJABES23EIST6015" ToRole="PROVEEDORESJABES23EIST6015" />
+        </EntityType>
+        <EntityType Name="PROVEEDORESJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOMBRES" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="APELLIDOS" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DIRECCION" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="CIUDAD" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="TELEFONO" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FACTURASJABES23EIST6015" Relationship="Self.FACT_PROV" FromRole="PROVEEDORESJABES23EIST6015" ToRole="FACTURASJABES23EIST6015" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="USUARIOSJABES23EIST6015">
+          <Key>
+            <PropertyRef Name="USUARIO" />
+          </Key>
+          <Property Name="USUARIO" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CLAVE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ESTADODECUENTA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+            <PropertyRef Name="NUMEROFACTURA" />
+          </Key>
+          <Property Name="CODIGO" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOMBRES" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="APELLIDOS" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="NUMEROFACTURA" Type="Int32" Nullable="false" />
+          <Property Name="MONTO" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PAGOS" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="BALANCE" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <Association Name="CHEQ_FACT">
+          <End Role="FACTURASJABES23EIST6015" Type="Self.FACTURASJABES23EIST6015" Multiplicity="0..1" />
+          <End Role="CHEQUESJABES23EIST6015" Type="Self.CHEQUESJABES23EIST6015" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTURASJABES23EIST6015">
+              <PropertyRef Name="NUMEROFACTURA" />
+            </Principal>
+            <Dependent Role="CHEQUESJABES23EIST6015">
+              <PropertyRef Name="NUMEROFACTURA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FACT_PROV">
+          <End Role="PROVEEDORESJABES23EIST6015" Type="Self.PROVEEDORESJABES23EIST6015" Multiplicity="0..1" />
+          <End Role="FACTURASJABES23EIST6015" Type="Self.FACTURASJABES23EIST6015" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROVEEDORESJABES23EIST6015">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="FACTURASJABES23EIST6015">
+              <PropertyRef Name="CODIGO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SCXPJABES23EIST6015Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CHEQUESJABES23EIST6015" EntityType="Self.CHEQUESJABES23EIST6015" />
+          <EntitySet Name="FACTURASJABES23EIST6015" EntityType="Self.FACTURASJABES23EIST6015" />
+          <EntitySet Name="PROVEEDORESJABES23EIST6015" EntityType="Self.PROVEEDORESJABES23EIST6015" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="USUARIOSJABES23EIST6015" EntityType="Self.USUARIOSJABES23EIST6015" />
+          <EntitySet Name="ESTADODECUENTAS" EntityType="Self.ESTADODECUENTA" />
+          <AssociationSet Name="CHEQ_FACT" Association="Self.CHEQ_FACT">
+            <End Role="FACTURASJABES23EIST6015" EntitySet="FACTURASJABES23EIST6015" />
+            <End Role="CHEQUESJABES23EIST6015" EntitySet="CHEQUESJABES23EIST6015" />
+          </AssociationSet>
+          <AssociationSet Name="FACT_PROV" Association="Self.FACT_PROV">
+            <End Role="PROVEEDORESJABES23EIST6015" EntitySet="PROVEEDORESJABES23EIST6015" />
+            <End Role="FACTURASJABES23EIST6015" EntitySet="FACTURASJABES23EIST6015" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SCXPJABES23EIST6015Model.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SCXPJABES23EIST6015Model.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SCXPJABES23EIST6015ModelStoreContainer" CdmEntityContainer="SCXPJABES23EIST6015Entities">
+          <EntitySetMapping Name="CHEQUESJABES23EIST6015">
+            <EntityTypeMapping TypeName="SCXPJABES23EIST6015Model.CHEQUESJABES23EIST6015">
+              <MappingFragment StoreEntitySet="CHEQUESJABES23EIST6015">
+                <ScalarProperty Name="NUMEROCHEQUE" ColumnName="NUMEROCHEQUE" />
+                <ScalarProperty Name="NUMEROFACTURA" ColumnName="NUMEROFACTURA" />
+                <ScalarProperty Name="VALORCHEQUE" ColumnName="VALORCHEQUE" />
+                <ScalarProperty Name="FECHACHEQUE" ColumnName="FECHACHEQUE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FACTURASJABES23EIST6015">
+            <EntityTypeMapping TypeName="SCXPJABES23EIST6015Model.FACTURASJABES23EIST6015">
+              <MappingFragment StoreEntitySet="FACTURASJABES23EIST6015">
+                <ScalarProperty Name="NUMEROFACTURA" ColumnName="NUMEROFACTURA" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="VALORFACTURA" ColumnName="VALORFACTURA" />
+                <ScalarProperty Name="FECHAFACTURA" ColumnName="FECHAFACTURA" />
+                <ScalarProperty Name="FECHAVENCIMIENTO" ColumnName="FECHAVENCIMIENTO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROVEEDORESJABES23EIST6015">
+            <EntityTypeMapping TypeName="SCXPJABES23EIST6015Model.PROVEEDORESJABES23EIST6015">
+              <MappingFragment StoreEntitySet="PROVEEDORESJABES23EIST6015">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRES" ColumnName="NOMBRES" />
+                <ScalarProperty Name="APELLIDOS" ColumnName="APELLIDOS" />
+                <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+                <ScalarProperty Name="CIUDAD" ColumnName="CIUDAD" />
+                <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="SCXPJABES23EIST6015Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USUARIOSJABES23EIST6015">
+            <EntityTypeMapping TypeName="SCXPJABES23EIST6015Model.USUARIOSJABES23EIST6015">
+              <MappingFragment StoreEntitySet="USUARIOSJABES23EIST6015">
+                <ScalarProperty Name="USUARIO" ColumnName="USUARIO" />
+                <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ESTADODECUENTAS">
+            <EntityTypeMapping TypeName="SCXPJABES23EIST6015Model.ESTADODECUENTA">
+              <MappingFragment StoreEntitySet="ESTADODECUENTAS">
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+                <ScalarProperty Name="NOMBRES" ColumnName="NOMBRES" />
+                <ScalarProperty Name="APELLIDOS" ColumnName="APELLIDOS" />
+                <ScalarProperty Name="NUMEROFACTURA" ColumnName="NUMEROFACTURA" />
+                <ScalarProperty Name="MONTO" ColumnName="MONTO" />
+                <ScalarProperty Name="PAGOS" ColumnName="PAGOS" />
+                <ScalarProperty Name="BALANCE" ColumnName="BALANCE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="SCXPJABES23EIST6015Model.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="SCXPJABES23EIST6015Model.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="SCXPJABES23EIST6015Model.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SCXPJABES23EIST6015Model.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SCXPJABES23EIST6015Model.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SCXPJABES23EIST6015Model.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SCXPJABES23EIST6015Model.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SCXPJABES23EIST6015Model.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="SCXPJABES23EIST6015Model.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
